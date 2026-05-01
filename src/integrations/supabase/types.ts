@@ -14,7 +14,298 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      equipos: {
+        Row: {
+          actualizado_en: string
+          almacenamiento_gb: number | null
+          codigo_inventario: string
+          creado_en: string
+          estado: Database["public"]["Enums"]["estado_equipo"]
+          fecha_adquisicion: string | null
+          filial_id: string | null
+          foto_url: string | null
+          garantia_hasta: string | null
+          id: string
+          ip_asignada: string | null
+          mac_address: string | null
+          marca: string | null
+          modelo: string | null
+          numero_factura: string | null
+          numero_imei: string | null
+          numero_serie: string | null
+          observaciones: string | null
+          procesador: string | null
+          proveedor: string | null
+          ram_gb: number | null
+          sector_id: string | null
+          sistema_operativo: string | null
+          tipo_equipo: Database["public"]["Enums"]["tipo_equipo"]
+          usuario_asignado: string | null
+          valor_compra: number | null
+        }
+        Insert: {
+          actualizado_en?: string
+          almacenamiento_gb?: number | null
+          codigo_inventario: string
+          creado_en?: string
+          estado?: Database["public"]["Enums"]["estado_equipo"]
+          fecha_adquisicion?: string | null
+          filial_id?: string | null
+          foto_url?: string | null
+          garantia_hasta?: string | null
+          id?: string
+          ip_asignada?: string | null
+          mac_address?: string | null
+          marca?: string | null
+          modelo?: string | null
+          numero_factura?: string | null
+          numero_imei?: string | null
+          numero_serie?: string | null
+          observaciones?: string | null
+          procesador?: string | null
+          proveedor?: string | null
+          ram_gb?: number | null
+          sector_id?: string | null
+          sistema_operativo?: string | null
+          tipo_equipo: Database["public"]["Enums"]["tipo_equipo"]
+          usuario_asignado?: string | null
+          valor_compra?: number | null
+        }
+        Update: {
+          actualizado_en?: string
+          almacenamiento_gb?: number | null
+          codigo_inventario?: string
+          creado_en?: string
+          estado?: Database["public"]["Enums"]["estado_equipo"]
+          fecha_adquisicion?: string | null
+          filial_id?: string | null
+          foto_url?: string | null
+          garantia_hasta?: string | null
+          id?: string
+          ip_asignada?: string | null
+          mac_address?: string | null
+          marca?: string | null
+          modelo?: string | null
+          numero_factura?: string | null
+          numero_imei?: string | null
+          numero_serie?: string | null
+          observaciones?: string | null
+          procesador?: string | null
+          proveedor?: string | null
+          ram_gb?: number | null
+          sector_id?: string | null
+          sistema_operativo?: string | null
+          tipo_equipo?: Database["public"]["Enums"]["tipo_equipo"]
+          usuario_asignado?: string | null
+          valor_compra?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "equipos_filial_id_fkey"
+            columns: ["filial_id"]
+            isOneToOne: false
+            referencedRelation: "filiales"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "equipos_sector_id_fkey"
+            columns: ["sector_id"]
+            isOneToOne: false
+            referencedRelation: "sectores"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      filiales: {
+        Row: {
+          actualizado_en: string
+          ciudad: string | null
+          codigo_filial: string
+          creado_en: string
+          id: string
+          nombre: string
+          pais: string | null
+        }
+        Insert: {
+          actualizado_en?: string
+          ciudad?: string | null
+          codigo_filial: string
+          creado_en?: string
+          id?: string
+          nombre: string
+          pais?: string | null
+        }
+        Update: {
+          actualizado_en?: string
+          ciudad?: string | null
+          codigo_filial?: string
+          creado_en?: string
+          id?: string
+          nombre?: string
+          pais?: string | null
+        }
+        Relationships: []
+      }
+      mantenimientos: {
+        Row: {
+          costo: number | null
+          creado_en: string
+          descripcion: string | null
+          equipo_id: string
+          estado: Database["public"]["Enums"]["estado_mantenimiento"]
+          fecha: string
+          id: string
+          tecnico: string | null
+          tipo: Database["public"]["Enums"]["tipo_mantenimiento"]
+        }
+        Insert: {
+          costo?: number | null
+          creado_en?: string
+          descripcion?: string | null
+          equipo_id: string
+          estado?: Database["public"]["Enums"]["estado_mantenimiento"]
+          fecha?: string
+          id?: string
+          tecnico?: string | null
+          tipo: Database["public"]["Enums"]["tipo_mantenimiento"]
+        }
+        Update: {
+          costo?: number | null
+          creado_en?: string
+          descripcion?: string | null
+          equipo_id?: string
+          estado?: Database["public"]["Enums"]["estado_mantenimiento"]
+          fecha?: string
+          id?: string
+          tecnico?: string | null
+          tipo?: Database["public"]["Enums"]["tipo_mantenimiento"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mantenimientos_equipo_id_fkey"
+            columns: ["equipo_id"]
+            isOneToOne: false
+            referencedRelation: "equipos"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      movimientos: {
+        Row: {
+          creado_en: string
+          equipo_id: string
+          fecha: string
+          filial_destino: string | null
+          filial_origen: string | null
+          id: string
+          observaciones: string | null
+          responsable: string | null
+          sector_destino: string | null
+          sector_origen: string | null
+          tipo_movimiento: Database["public"]["Enums"]["tipo_movimiento"]
+          usuario_destino: string | null
+          usuario_origen: string | null
+        }
+        Insert: {
+          creado_en?: string
+          equipo_id: string
+          fecha?: string
+          filial_destino?: string | null
+          filial_origen?: string | null
+          id?: string
+          observaciones?: string | null
+          responsable?: string | null
+          sector_destino?: string | null
+          sector_origen?: string | null
+          tipo_movimiento: Database["public"]["Enums"]["tipo_movimiento"]
+          usuario_destino?: string | null
+          usuario_origen?: string | null
+        }
+        Update: {
+          creado_en?: string
+          equipo_id?: string
+          fecha?: string
+          filial_destino?: string | null
+          filial_origen?: string | null
+          id?: string
+          observaciones?: string | null
+          responsable?: string | null
+          sector_destino?: string | null
+          sector_origen?: string | null
+          tipo_movimiento?: Database["public"]["Enums"]["tipo_movimiento"]
+          usuario_destino?: string | null
+          usuario_origen?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "movimientos_equipo_id_fkey"
+            columns: ["equipo_id"]
+            isOneToOne: false
+            referencedRelation: "equipos"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "movimientos_filial_destino_fkey"
+            columns: ["filial_destino"]
+            isOneToOne: false
+            referencedRelation: "filiales"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "movimientos_filial_origen_fkey"
+            columns: ["filial_origen"]
+            isOneToOne: false
+            referencedRelation: "filiales"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "movimientos_sector_destino_fkey"
+            columns: ["sector_destino"]
+            isOneToOne: false
+            referencedRelation: "sectores"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "movimientos_sector_origen_fkey"
+            columns: ["sector_origen"]
+            isOneToOne: false
+            referencedRelation: "sectores"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sectores: {
+        Row: {
+          actualizado_en: string
+          creado_en: string
+          filial_id: string
+          id: string
+          nombre: string
+        }
+        Insert: {
+          actualizado_en?: string
+          creado_en?: string
+          filial_id: string
+          id?: string
+          nombre: string
+        }
+        Update: {
+          actualizado_en?: string
+          creado_en?: string
+          filial_id?: string
+          id?: string
+          nombre?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sectores_filial_id_fkey"
+            columns: ["filial_id"]
+            isOneToOne: false
+            referencedRelation: "filiales"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +314,31 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      estado_equipo:
+        | "Activo"
+        | "En reparacion"
+        | "De baja"
+        | "En deposito"
+        | "Extraviado"
+      estado_mantenimiento: "Pendiente" | "En proceso" | "Completado"
+      tipo_equipo:
+        | "PC"
+        | "Notebook"
+        | "Celular"
+        | "Impresora"
+        | "Escaner"
+        | "Servidor"
+        | "Tablet"
+        | "UPS"
+        | "Otro"
+      tipo_mantenimiento: "Preventivo" | "Correctivo"
+      tipo_movimiento:
+        | "Asignacion"
+        | "Reasignacion"
+        | "Reparacion"
+        | "Baja"
+        | "Ingreso"
+        | "Traslado entre filiales"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +465,35 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      estado_equipo: [
+        "Activo",
+        "En reparacion",
+        "De baja",
+        "En deposito",
+        "Extraviado",
+      ],
+      estado_mantenimiento: ["Pendiente", "En proceso", "Completado"],
+      tipo_equipo: [
+        "PC",
+        "Notebook",
+        "Celular",
+        "Impresora",
+        "Escaner",
+        "Servidor",
+        "Tablet",
+        "UPS",
+        "Otro",
+      ],
+      tipo_mantenimiento: ["Preventivo", "Correctivo"],
+      tipo_movimiento: [
+        "Asignacion",
+        "Reasignacion",
+        "Reparacion",
+        "Baja",
+        "Ingreso",
+        "Traslado entre filiales",
+      ],
+    },
   },
 } as const
