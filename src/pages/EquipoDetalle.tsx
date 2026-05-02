@@ -6,9 +6,11 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { EstadoBadge } from "@/components/EstadoBadge";
 import { iconoTipo, labelTipo, formatearFecha, formatearMoneda, estadoGarantia, type EstadoEquipo, type TipoEquipo } from "@/lib/inventario";
-import { ArrowLeft, Pencil, Printer, Trash2 } from "lucide-react";
+import { ArrowLeft, Pencil, Printer, Trash2, History, Wrench } from "lucide-react";
 import { QRCodeSVG } from "qrcode.react";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { MovimientoDialog } from "@/components/MovimientoDialog";
+import { MantenimientoDialog } from "@/components/MantenimientoDialog";
 import { toast } from "sonner";
 
 type Equipo = any;
