@@ -115,5 +115,11 @@
 
 @media print {
   .no-print { display: none !important; }
-  body { background: white !important; }
+  body { background: white !important; color: black !important; }
+  @page { size: A4; margin: 12mm; }
+  .print-area { font-size: 10pt; }
+  table { page-break-inside: auto; border-collapse: collapse; width: 100%; }
+  tr { page-break-inside: avoid; page-break-after: auto; }
+  thead { display: table-header-group; }
+  th, td { border: 1px solid #ddd !important; padding: 4px 6px !important; }
 }
