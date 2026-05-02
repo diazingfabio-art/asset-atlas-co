@@ -25,23 +25,23 @@ export default function EquipoDetalle() {
   const [mantenimientos, setMantenimientos] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    (async () => {
-      const { data: eq } = await supabase.from("equipos").select("*").eq("id", id!).maybeSingle();
-      if (!eq) { setLoading(false); return; }
-      setEquipo(eq);
-      const [fi, se, mv, mt] = await Promise.all([
-        eq.filial_id ? supabase.from("filiales").select("*").eq("id", eq.filial_id).maybeSingle() : Promise.resolve({ data: null }),
-        eq.sector_id ? supabase.from("sectores").select("*").eq("id", eq.sector_id).maybeSingle() : Promise.resolve({ data: null }),
-        supabase.from("movimientos").select("*").eq("equipo_id", id!).order("fecha", { ascending: false }),
-        supabase.from("mantenimientos").select("*").eq("equipo_id", id!).order("fecha", { ascending: false }),
-      ]);
-      setFilial(fi.data); setSector(se.data);
-      setMovimientos((mv as any).data ?? []);
-      setMantenimientos((mt as any).data ?? []);
-      setLoading(false);
-    })();
-  }, [id]);
+  const cargar = async () => {
+    const { data: eq } = await supabase.from("equipos").select("*").eq("id", id!).maybeSingle();
+    if (!eq) { setLoading(false); return; }
+    setEquipo(eq);
+    const [fi, se, mv, mt] = await Promise.all([
+      eq.filial_id ? supabase.from("filiales").select("*").eq("id", eq.filial_id).maybeSingle() : Promise.resolve({ data: null }),
+      eq.sector_id ? supabase.from("sectores").select("*").eq("id", eq.sector_id).maybeSingle() : Promise.resolve({ data: null }),
+      supabase.from("movimientos").select("*").eq("equipo_id", id!).order("fecha", { ascending: false }),
+      supabase.from("mantenimientos").select("*").eq("equipo_id", id!).order("fecha", { ascending: false }),
+    ]);
+    setFilial(fi.data); setSector(se.data);
+    setMovimientos((mv as any).data ?? []);
+    setMantenimientos((mt as any).data ?? []);
+    setLoading(false);
+  };
+
+  useEffect(() => { cargar(); /* eslint-disable-next-line */ }, [id]);
 
   const eliminar = async () => {
     const res = await supabase.from("equipos").delete().eq("id", id!);
@@ -72,6 +72,16 @@ export default function EquipoDetalle() {
           <p className="text-sm text-muted-foreground">{equipo.marca} {equipo.modelo}</p>
         </div>
         <Button variant="outline" onClick={() => window.print()}><Printer className="h-4 w-4 mr-1.5" />Imprimir</Button>
+        <MovimientoDialog
+          equipoPreseleccionado={equipo}
+          onSaved={cargar}
+          trigger={<Button variant="outline"><History className="h-4 w-4 mr-1.5" />Movimiento</Button>}
+        />
+        <MantenimientoDialog
+          equipoPreseleccionado={equipo}
+          onSaved={cargar}
+          trigger={<Button variant="outline"><Wrench className="h-4 w-4 mr-1.5" />Mantenimiento</Button>}
+        />
         <Button asChild><Link to={`/equipos/${id}/editar`}><Pencil className="h-4 w-4 mr-1.5" />Editar</Link></Button>
         <AlertDialog>
           <AlertDialogTrigger asChild><Button variant="destructive" size="icon"><Trash2 className="h-4 w-4" /></Button></AlertDialogTrigger>
