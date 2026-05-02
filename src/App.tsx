@@ -8,6 +8,9 @@ import Equipos from "./pages/Equipos";
 import EquipoForm from "./pages/EquipoForm";
 import EquipoDetalle from "./pages/EquipoDetalle";
 import Filiales from "./pages/Filiales";
+import Movimientos from "./pages/Movimientos";
+import Mantenimientos from "./pages/Mantenimientos";
+import Reportes from "./pages/Reportes";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -25,6 +28,9 @@ const App = () => (
             <Route path="/equipos/:id" element={<EquipoDetalle />} />
             <Route path="/equipos/:id/editar" element={<EquipoForm />} />
             <Route path="/filiales" element={<Filiales />} />
+            <Route path="/movimientos" element={<Movimientos />} />
+            <Route path="/mantenimientos" element={<Mantenimientos />} />
+            <Route path="/reportes" element={<Reportes />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

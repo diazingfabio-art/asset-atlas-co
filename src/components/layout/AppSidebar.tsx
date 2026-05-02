@@ -12,12 +12,12 @@ const navPrincipal = [
 ];
 
 const navOperaciones = [
-  { title: "Movimientos", url: "/movimientos", icon: History, disabled: true },
-  { title: "Mantenimientos", url: "/mantenimientos", icon: Wrench, disabled: true },
+  { title: "Movimientos", url: "/movimientos", icon: History },
+  { title: "Mantenimientos", url: "/mantenimientos", icon: Wrench },
 ];
 
 const navReportes = [
-  { title: "Reportes", url: "/reportes", icon: FileBarChart, disabled: true },
+  { title: "Reportes", url: "/reportes", icon: FileBarChart },
   { title: "Modo auditoría", url: "/auditoria", icon: ClipboardCheck, disabled: true },
 ];
 
