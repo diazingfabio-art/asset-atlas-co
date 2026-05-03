@@ -360,6 +360,33 @@ export type Database = {
           },
         ]
       }
+      profiles: {
+        Row: {
+          actualizado_en: string
+          creado_en: string
+          email: string | null
+          id: string
+          nombre_completo: string | null
+          user_id: string
+        }
+        Insert: {
+          actualizado_en?: string
+          creado_en?: string
+          email?: string | null
+          id?: string
+          nombre_completo?: string | null
+          user_id: string
+        }
+        Update: {
+          actualizado_en?: string
+          creado_en?: string
+          email?: string | null
+          id?: string
+          nombre_completo?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       sectores: {
         Row: {
           actualizado_en: string
@@ -392,14 +419,91 @@ export type Database = {
           },
         ]
       }
+      user_permissions: {
+        Row: {
+          actualizado_en: string
+          id: string
+          modulo: Database["public"]["Enums"]["app_module"]
+          puede_crear: boolean
+          puede_editar: boolean
+          puede_eliminar: boolean
+          puede_ver: boolean
+          user_id: string
+        }
+        Insert: {
+          actualizado_en?: string
+          id?: string
+          modulo: Database["public"]["Enums"]["app_module"]
+          puede_crear?: boolean
+          puede_editar?: boolean
+          puede_eliminar?: boolean
+          puede_ver?: boolean
+          user_id: string
+        }
+        Update: {
+          actualizado_en?: string
+          id?: string
+          modulo?: Database["public"]["Enums"]["app_module"]
+          puede_crear?: boolean
+          puede_editar?: boolean
+          puede_eliminar?: boolean
+          puede_ver?: boolean
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          creado_en: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          creado_en?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          creado_en?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
+      tiene_permiso: {
+        Args: {
+          _accion: string
+          _modulo: Database["public"]["Enums"]["app_module"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
+      app_module:
+        | "equipos"
+        | "filiales"
+        | "movimientos"
+        | "mantenimientos"
+        | "auditorias"
+        | "reportes"
+        | "alertas"
+      app_role: "admin" | "usuario"
       estado_auditoria: "En curso" | "Finalizada" | "Cancelada"
       estado_equipo:
         | "Activo"
@@ -558,6 +662,16 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      app_module: [
+        "equipos",
+        "filiales",
+        "movimientos",
+        "mantenimientos",
+        "auditorias",
+        "reportes",
+        "alertas",
+      ],
+      app_role: ["admin", "usuario"],
       estado_auditoria: ["En curso", "Finalizada", "Cancelada"],
       estado_equipo: [
         "Activo",
