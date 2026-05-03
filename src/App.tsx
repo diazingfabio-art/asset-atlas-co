@@ -11,6 +11,9 @@ import Filiales from "./pages/Filiales";
 import Movimientos from "./pages/Movimientos";
 import Mantenimientos from "./pages/Mantenimientos";
 import Reportes from "./pages/Reportes";
+import Auditorias from "./pages/Auditorias";
+import AuditoriaDetalle from "./pages/AuditoriaDetalle";
+import Alertas from "./pages/Alertas";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -31,6 +34,9 @@ const App = () => (
             <Route path="/movimientos" element={<Movimientos />} />
             <Route path="/mantenimientos" element={<Mantenimientos />} />
             <Route path="/reportes" element={<Reportes />} />
+            <Route path="/auditorias" element={<Auditorias />} />
+            <Route path="/auditorias/:id" element={<AuditoriaDetalle />} />
+            <Route path="/alertas" element={<Alertas />} />
           </Route>
           <Route path="*" element={<NotFound />} />
         </Routes>

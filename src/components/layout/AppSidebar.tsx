@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { LayoutDashboard, HardDrive, Building2, History, FileBarChart, ClipboardCheck, Wrench } from "lucide-react";
+import { LayoutDashboard, HardDrive, Building2, History, FileBarChart, ClipboardCheck, Wrench, AlertTriangle } from "lucide-react";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel,
   SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarHeader, useSidebar,
@@ -18,7 +18,8 @@ const navOperaciones = [
 
 const navReportes = [
   { title: "Reportes", url: "/reportes", icon: FileBarChart },
-  { title: "Modo auditoría", url: "/auditoria", icon: ClipboardCheck, disabled: true },
+  { title: "Modo auditoría", url: "/auditorias", icon: ClipboardCheck },
+  { title: "Alertas", url: "/alertas", icon: AlertTriangle },
 ];
 
 export function AppSidebar() {

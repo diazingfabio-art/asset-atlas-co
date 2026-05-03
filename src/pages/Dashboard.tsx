@@ -56,7 +56,8 @@ export default function Dashboard() {
         <div className="flex gap-2 flex-wrap">
           <Button asChild><Link to="/equipos/nuevo"><Plus className="h-4 w-4 mr-1.5" />Agregar equipo</Link></Button>
           <Button asChild variant="outline"><Link to="/equipos"><Search className="h-4 w-4 mr-1.5" />Búsqueda rápida</Link></Button>
-          <Button variant="outline" disabled><FileBarChart className="h-4 w-4 mr-1.5" />Reportes</Button>
+          <Button asChild variant="outline"><Link to="/reportes"><FileBarChart className="h-4 w-4 mr-1.5" />Reportes</Link></Button>
+          <Button asChild variant="outline"><Link to="/alertas"><AlertTriangle className="h-4 w-4 mr-1.5" />Alertas</Link></Button>
         </div>
       </div>
 
