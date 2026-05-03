@@ -14,6 +14,92 @@ export type Database = {
   }
   public: {
     Tables: {
+      auditoria_items: {
+        Row: {
+          auditoria_id: string
+          creado_en: string
+          equipo_id: string
+          estado: Database["public"]["Enums"]["estado_item_auditoria"]
+          id: string
+          notas: string | null
+          ubicacion_encontrada: string | null
+          usuario_encontrado: string | null
+          verificado_en: string | null
+        }
+        Insert: {
+          auditoria_id: string
+          creado_en?: string
+          equipo_id: string
+          estado?: Database["public"]["Enums"]["estado_item_auditoria"]
+          id?: string
+          notas?: string | null
+          ubicacion_encontrada?: string | null
+          usuario_encontrado?: string | null
+          verificado_en?: string | null
+        }
+        Update: {
+          auditoria_id?: string
+          creado_en?: string
+          equipo_id?: string
+          estado?: Database["public"]["Enums"]["estado_item_auditoria"]
+          id?: string
+          notas?: string | null
+          ubicacion_encontrada?: string | null
+          usuario_encontrado?: string | null
+          verificado_en?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "auditoria_items_auditoria_id_fkey"
+            columns: ["auditoria_id"]
+            isOneToOne: false
+            referencedRelation: "auditorias"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      auditorias: {
+        Row: {
+          actualizado_en: string
+          creado_en: string
+          estado: Database["public"]["Enums"]["estado_auditoria"]
+          fecha_fin: string | null
+          fecha_inicio: string
+          filial_id: string | null
+          id: string
+          nombre: string
+          observaciones: string | null
+          responsable: string | null
+          sector_id: string | null
+        }
+        Insert: {
+          actualizado_en?: string
+          creado_en?: string
+          estado?: Database["public"]["Enums"]["estado_auditoria"]
+          fecha_fin?: string | null
+          fecha_inicio?: string
+          filial_id?: string | null
+          id?: string
+          nombre: string
+          observaciones?: string | null
+          responsable?: string | null
+          sector_id?: string | null
+        }
+        Update: {
+          actualizado_en?: string
+          creado_en?: string
+          estado?: Database["public"]["Enums"]["estado_auditoria"]
+          fecha_fin?: string | null
+          fecha_inicio?: string
+          filial_id?: string | null
+          id?: string
+          nombre?: string
+          observaciones?: string | null
+          responsable?: string | null
+          sector_id?: string | null
+        }
+        Relationships: []
+      }
       equipos: {
         Row: {
           actualizado_en: string
@@ -314,12 +400,18 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
+      estado_auditoria: "En curso" | "Finalizada" | "Cancelada"
       estado_equipo:
         | "Activo"
         | "En reparacion"
         | "De baja"
         | "En deposito"
         | "Extraviado"
+      estado_item_auditoria:
+        | "Pendiente"
+        | "Verificado"
+        | "No encontrado"
+        | "Discrepancia"
       estado_mantenimiento: "Pendiente" | "En proceso" | "Completado"
       tipo_equipo:
         | "PC"
@@ -466,12 +558,19 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      estado_auditoria: ["En curso", "Finalizada", "Cancelada"],
       estado_equipo: [
         "Activo",
         "En reparacion",
         "De baja",
         "En deposito",
         "Extraviado",
+      ],
+      estado_item_auditoria: [
+        "Pendiente",
+        "Verificado",
+        "No encontrado",
+        "Discrepancia",
       ],
       estado_mantenimiento: ["Pendiente", "En proceso", "Completado"],
       tipo_equipo: [
