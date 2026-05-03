@@ -7,28 +7,32 @@ import {
 import { useAuth, AppModule } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 
-const navPrincipal = [
+const navPrincipal: { title: string; url: string; icon: any; modulo?: AppModule }[] = [
   { title: "Panel principal", url: "/", icon: LayoutDashboard },
-  { title: "Equipos", url: "/equipos", icon: HardDrive },
-  { title: "Filiales y sectores", url: "/filiales", icon: Building2 },
+  { title: "Equipos", url: "/equipos", icon: HardDrive, modulo: "equipos" },
+  { title: "Filiales y sectores", url: "/filiales", icon: Building2, modulo: "filiales" },
 ];
 
-const navOperaciones = [
-  { title: "Movimientos", url: "/movimientos", icon: History },
-  { title: "Mantenimientos", url: "/mantenimientos", icon: Wrench },
+const navOperaciones: { title: string; url: string; icon: any; modulo?: AppModule }[] = [
+  { title: "Movimientos", url: "/movimientos", icon: History, modulo: "movimientos" },
+  { title: "Mantenimientos", url: "/mantenimientos", icon: Wrench, modulo: "mantenimientos" },
 ];
 
-const navReportes = [
-  { title: "Reportes", url: "/reportes", icon: FileBarChart },
-  { title: "Modo auditoría", url: "/auditorias", icon: ClipboardCheck },
-  { title: "Alertas", url: "/alertas", icon: AlertTriangle },
+const navReportes: { title: string; url: string; icon: any; modulo?: AppModule }[] = [
+  { title: "Reportes", url: "/reportes", icon: FileBarChart, modulo: "reportes" },
+  { title: "Modo auditoría", url: "/auditorias", icon: ClipboardCheck, modulo: "auditorias" },
+  { title: "Alertas", url: "/alertas", icon: AlertTriangle, modulo: "alertas" },
 ];
 
 export function AppSidebar() {
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
   const { pathname } = useLocation();
+  const navigate = useNavigate();
+  const { user, isAdmin, role, puede, signOut } = useAuth();
   const isActive = (url: string) => url === "/" ? pathname === "/" : pathname.startsWith(url);
+
+  const filtrar = (items: typeof navPrincipal) => items.filter(i => !i.modulo || puede(i.modulo, "puede_ver"));
 
   const renderItems = (items: typeof navPrincipal) => (
     <SidebarMenu>
