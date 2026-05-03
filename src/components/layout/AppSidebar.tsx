@@ -86,19 +86,53 @@ export function AppSidebar() {
         <SidebarContent className="px-2 py-3">
           <SidebarGroup>
             {!collapsed && <SidebarGroupLabel className="text-sidebar-foreground/50 text-[10px] uppercase tracking-wider px-2">Gestión</SidebarGroupLabel>}
-            <SidebarGroupContent>{renderItems(navPrincipal)}</SidebarGroupContent>
+            <SidebarGroupContent>{renderItems(filtrar(navPrincipal))}</SidebarGroupContent>
           </SidebarGroup>
 
-          <SidebarGroup>
-            {!collapsed && <SidebarGroupLabel className="text-sidebar-foreground/50 text-[10px] uppercase tracking-wider px-2">Operaciones</SidebarGroupLabel>}
-            <SidebarGroupContent>{renderItems(navOperaciones)}</SidebarGroupContent>
-          </SidebarGroup>
+          {filtrar(navOperaciones).length > 0 && (
+            <SidebarGroup>
+              {!collapsed && <SidebarGroupLabel className="text-sidebar-foreground/50 text-[10px] uppercase tracking-wider px-2">Operaciones</SidebarGroupLabel>}
+              <SidebarGroupContent>{renderItems(filtrar(navOperaciones))}</SidebarGroupContent>
+            </SidebarGroup>
+          )}
 
-          <SidebarGroup>
-            {!collapsed && <SidebarGroupLabel className="text-sidebar-foreground/50 text-[10px] uppercase tracking-wider px-2">Auditoría</SidebarGroupLabel>}
-            <SidebarGroupContent>{renderItems(navReportes)}</SidebarGroupContent>
-          </SidebarGroup>
+          {filtrar(navReportes).length > 0 && (
+            <SidebarGroup>
+              {!collapsed && <SidebarGroupLabel className="text-sidebar-foreground/50 text-[10px] uppercase tracking-wider px-2">Auditoría</SidebarGroupLabel>}
+              <SidebarGroupContent>{renderItems(filtrar(navReportes))}</SidebarGroupContent>
+            </SidebarGroup>
+          )}
+
+          {isAdmin && (
+            <SidebarGroup>
+              {!collapsed && <SidebarGroupLabel className="text-sidebar-foreground/50 text-[10px] uppercase tracking-wider px-2">Administración</SidebarGroupLabel>}
+              <SidebarGroupContent>
+                {renderItems([{ title: "Configuración", url: "/configuracion", icon: Settings }])}
+              </SidebarGroupContent>
+            </SidebarGroup>
+          )}
         </SidebarContent>
+
+        <SidebarFooter className="border-t border-sidebar-border p-3">
+          {user && (
+            <div className={`flex ${collapsed ? "flex-col" : "items-center"} gap-2`}>
+              <div className={`flex items-center gap-2 min-w-0 ${collapsed ? "" : "flex-1"}`}>
+                <div className="h-8 w-8 rounded-full bg-sidebar-primary text-sidebar-primary-foreground flex items-center justify-center shrink-0">
+                  {isAdmin ? <ShieldCheck className="h-4 w-4" /> : <User className="h-4 w-4" />}
+                </div>
+                {!collapsed && (
+                  <div className="min-w-0">
+                    <div className="text-xs font-medium text-sidebar-foreground truncate">{user.email}</div>
+                    <div className="text-[10px] text-sidebar-foreground/60 capitalize">{role}</div>
+                  </div>
+                )}
+              </div>
+              <Button variant="ghost" size="icon" className="h-8 w-8 text-sidebar-foreground/70 hover:text-sidebar-foreground" onClick={async () => { await signOut(); navigate("/auth"); }}>
+                <LogOut className="h-4 w-4" />
+              </Button>
+            </div>
+          )}
+        </SidebarFooter>
       </div>
     </Sidebar>
   );
