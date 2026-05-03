@@ -1,9 +1,11 @@
-import { NavLink, useLocation } from "react-router-dom";
-import { LayoutDashboard, HardDrive, Building2, History, FileBarChart, ClipboardCheck, Wrench, AlertTriangle } from "lucide-react";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { LayoutDashboard, HardDrive, Building2, History, FileBarChart, ClipboardCheck, Wrench, AlertTriangle, Settings, LogOut, ShieldCheck, User } from "lucide-react";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel,
-  SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarHeader, useSidebar,
+  SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarHeader, SidebarFooter, useSidebar,
 } from "@/components/ui/sidebar";
+import { useAuth, AppModule } from "@/hooks/useAuth";
+import { Button } from "@/components/ui/button";
 
 const navPrincipal = [
   { title: "Panel principal", url: "/", icon: LayoutDashboard },
