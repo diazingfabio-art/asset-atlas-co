@@ -83,6 +83,25 @@ export default function EquipoForm() {
       toast.error("Faltan campos obligatorios");
       return;
     }
+    // Validaciones críticas
+    if (form.numero_serie) {
+      let q = supabase.from("equipos").select("id").eq("numero_serie", form.numero_serie);
+      if (editing) q = q.neq("id", id!);
+      const { data: exists } = await q.maybeSingle();
+      if (exists) { toast.error(`Ya existe un equipo con número de serie: ${form.numero_serie}`); return; }
+    }
+    if (requiereImei(form.tipo_equipo) && form.numero_imei && !/^\d{15}$/.test(form.numero_imei)) {
+      toast.error("El IMEI debe tener exactamente 15 dígitos numéricos"); return;
+    }
+    if (form.fecha_adquisicion && new Date(form.fecha_adquisicion) > new Date()) {
+      toast.error("La fecha de adquisición no puede ser futura"); return;
+    }
+    if (form.valor_compra && parseFloat(form.valor_compra) <= 0) {
+      toast.error("El valor de compra debe ser mayor a 0"); return;
+    }
+    if (form.estado === "De baja" && !form.observaciones.trim()) {
+      toast.error("Para dar de baja debés indicar el motivo en observaciones"); return;
+    }
     setSaving(true);
     const payload: any = {
       codigo_inventario: form.codigo_inventario,
