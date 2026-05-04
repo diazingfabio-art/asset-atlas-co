@@ -8,8 +8,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ESTADOS_EQUIPO, TIPOS_EQUIPO, formatearFecha, formatearMoneda, labelTipo, type EstadoEquipo, type TipoEquipo } from "@/lib/inventario";
-import { Printer, FileSpreadsheet, FileText } from "lucide-react";
+import { Printer, FileSpreadsheet, FileText, FileDown } from "lucide-react";
 import * as XLSX from "xlsx";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 import { toast } from "sonner";
 
 type Equipo = any;
