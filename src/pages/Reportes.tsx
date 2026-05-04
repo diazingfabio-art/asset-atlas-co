@@ -187,10 +187,11 @@ export default function Reportes() {
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Reportes</h1>
           <p className="text-sm text-muted-foreground mt-1">Generá reportes filtrados, listos para imprimir o exportar para auditoría</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           <Button variant="outline" onClick={exportarCSV}><FileText className="h-4 w-4 mr-1.5" />CSV</Button>
           <Button variant="outline" onClick={exportarExcel}><FileSpreadsheet className="h-4 w-4 mr-1.5" />Excel</Button>
-          <Button onClick={() => window.print()}><Printer className="h-4 w-4 mr-1.5" />Imprimir / PDF</Button>
+          <Button variant="outline" onClick={exportarPDF}><FileDown className="h-4 w-4 mr-1.5" />PDF</Button>
+          <Button onClick={() => window.print()}><Printer className="h-4 w-4 mr-1.5" />Imprimir</Button>
         </div>
       </div>
 
