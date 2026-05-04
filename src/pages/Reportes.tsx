@@ -138,6 +138,46 @@ export default function Reportes() {
     URL.revokeObjectURL(url);
   };
 
+  const exportarPDF = () => {
+    if (filtrados.length === 0) { toast.error("No hay datos para exportar"); return; }
+    const doc = new jsPDF({ orientation: "landscape", unit: "mm", format: "a4" });
+    const fechaStr = new Date().toLocaleString("es-AR");
+    doc.setFontSize(16); doc.setFont("helvetica", "bold");
+    doc.text("InventarioTI — Reporte de Activos Tecnológicos", 14, 15);
+    doc.setFontSize(9); doc.setFont("helvetica", "normal");
+    doc.text(`Coordinación de Informática · Documento para auditoría`, 14, 21);
+    doc.text(`Emitido: ${fechaStr}`, 14, 26);
+    doc.text(`Filial: ${fFilial === "todas" ? "Todas" : filiNombre(fFilial)}  |  Sector: ${fSector === "todos" ? "Todos" : sectNombre(fSector)}  |  Tipo: ${fTipo === "todos" ? "Todos" : labelTipo[fTipo as TipoEquipo]}  |  Estado: ${fEstado === "todos" ? "Todos" : fEstado}  |  Año: ${anio === "todos" ? "Todos" : anio}  |  Usuario: ${usuario || "—"}`, 14, 31);
+
+    autoTable(doc, {
+      startY: 36,
+      head: [["Código", "Tipo", "Marca/Modelo", "N° Serie", "Filial", "Sector", "Usuario", "Estado", "Adquisición", "Valor"]],
+      body: filtrados.map(e => [
+        e.codigo_inventario, labelTipo[e.tipo_equipo as TipoEquipo],
+        `${e.marca ?? ""} ${e.modelo ?? ""}`.trim(), e.numero_serie ?? "—",
+        filiNombre(e.filial_id), sectNombre(e.sector_id),
+        e.usuario_asignado ?? "Sin asignar", e.estado,
+        formatearFecha(e.fecha_adquisicion), e.valor_compra ? formatearMoneda(e.valor_compra) : "—",
+      ]),
+      styles: { fontSize: 7, cellPadding: 1.5 },
+      headStyles: { fillColor: [30, 41, 59], textColor: 255, fontStyle: "bold" },
+      alternateRowStyles: { fillColor: [248, 250, 252] },
+      didDrawPage: (data) => {
+        const pageCount = doc.getNumberOfPages();
+        doc.setFontSize(8);
+        doc.text(`Página ${data.pageNumber} de ${pageCount}`, doc.internal.pageSize.getWidth() - 30, doc.internal.pageSize.getHeight() - 8);
+      },
+    });
+
+    // Resumen al final
+    const finalY = (doc as any).lastAutoTable.finalY + 10;
+    doc.setFontSize(10); doc.setFont("helvetica", "bold");
+    doc.text(`Resumen: ${totales.total} equipos · Valor total: ${formatearMoneda(totales.valorTotal)}`, 14, finalY);
+
+    doc.save(`InventarioTI_${new Date().toISOString().slice(0,10)}.pdf`);
+    toast.success(`PDF generado con ${filtrados.length} equipos`);
+  };
+
   if (loading) return <div className="space-y-4"><Skeleton className="h-32" /><Skeleton className="h-96" /></div>;
 
   return (
