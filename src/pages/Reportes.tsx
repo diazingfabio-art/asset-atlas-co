@@ -8,8 +8,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ESTADOS_EQUIPO, TIPOS_EQUIPO, formatearFecha, formatearMoneda, labelTipo, type EstadoEquipo, type TipoEquipo } from "@/lib/inventario";
-import { Printer, FileSpreadsheet, FileText } from "lucide-react";
+import { Printer, FileSpreadsheet, FileText, FileDown } from "lucide-react";
 import * as XLSX from "xlsx";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 import { toast } from "sonner";
 
 type Equipo = any;
@@ -136,6 +138,46 @@ export default function Reportes() {
     URL.revokeObjectURL(url);
   };
 
+  const exportarPDF = () => {
+    if (filtrados.length === 0) { toast.error("No hay datos para exportar"); return; }
+    const doc = new jsPDF({ orientation: "landscape", unit: "mm", format: "a4" });
+    const fechaStr = new Date().toLocaleString("es-AR");
+    doc.setFontSize(16); doc.setFont("helvetica", "bold");
+    doc.text("InventarioTI — Reporte de Activos Tecnológicos", 14, 15);
+    doc.setFontSize(9); doc.setFont("helvetica", "normal");
+    doc.text(`Coordinación de Informática · Documento para auditoría`, 14, 21);
+    doc.text(`Emitido: ${fechaStr}`, 14, 26);
+    doc.text(`Filial: ${fFilial === "todas" ? "Todas" : filiNombre(fFilial)}  |  Sector: ${fSector === "todos" ? "Todos" : sectNombre(fSector)}  |  Tipo: ${fTipo === "todos" ? "Todos" : labelTipo[fTipo as TipoEquipo]}  |  Estado: ${fEstado === "todos" ? "Todos" : fEstado}  |  Año: ${anio === "todos" ? "Todos" : anio}  |  Usuario: ${usuario || "—"}`, 14, 31);
+
+    autoTable(doc, {
+      startY: 36,
+      head: [["Código", "Tipo", "Marca/Modelo", "N° Serie", "Filial", "Sector", "Usuario", "Estado", "Adquisición", "Valor"]],
+      body: filtrados.map(e => [
+        e.codigo_inventario, labelTipo[e.tipo_equipo as TipoEquipo],
+        `${e.marca ?? ""} ${e.modelo ?? ""}`.trim(), e.numero_serie ?? "—",
+        filiNombre(e.filial_id), sectNombre(e.sector_id),
+        e.usuario_asignado ?? "Sin asignar", e.estado,
+        formatearFecha(e.fecha_adquisicion), e.valor_compra ? formatearMoneda(e.valor_compra) : "—",
+      ]),
+      styles: { fontSize: 7, cellPadding: 1.5 },
+      headStyles: { fillColor: [30, 41, 59], textColor: 255, fontStyle: "bold" },
+      alternateRowStyles: { fillColor: [248, 250, 252] },
+      didDrawPage: (data) => {
+        const pageCount = doc.getNumberOfPages();
+        doc.setFontSize(8);
+        doc.text(`Página ${data.pageNumber} de ${pageCount}`, doc.internal.pageSize.getWidth() - 30, doc.internal.pageSize.getHeight() - 8);
+      },
+    });
+
+    // Resumen al final
+    const finalY = (doc as any).lastAutoTable.finalY + 10;
+    doc.setFontSize(10); doc.setFont("helvetica", "bold");
+    doc.text(`Resumen: ${totales.total} equipos · Valor total: ${formatearMoneda(totales.valorTotal)}`, 14, finalY);
+
+    doc.save(`InventarioTI_${new Date().toISOString().slice(0,10)}.pdf`);
+    toast.success(`PDF generado con ${filtrados.length} equipos`);
+  };
+
   if (loading) return <div className="space-y-4"><Skeleton className="h-32" /><Skeleton className="h-96" /></div>;
 
   return (
@@ -145,10 +187,11 @@ export default function Reportes() {
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Reportes</h1>
           <p className="text-sm text-muted-foreground mt-1">Generá reportes filtrados, listos para imprimir o exportar para auditoría</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 flex-wrap">
           <Button variant="outline" onClick={exportarCSV}><FileText className="h-4 w-4 mr-1.5" />CSV</Button>
           <Button variant="outline" onClick={exportarExcel}><FileSpreadsheet className="h-4 w-4 mr-1.5" />Excel</Button>
-          <Button onClick={() => window.print()}><Printer className="h-4 w-4 mr-1.5" />Imprimir / PDF</Button>
+          <Button variant="outline" onClick={exportarPDF}><FileDown className="h-4 w-4 mr-1.5" />PDF</Button>
+          <Button onClick={() => window.print()}><Printer className="h-4 w-4 mr-1.5" />Imprimir</Button>
         </div>
       </div>
 

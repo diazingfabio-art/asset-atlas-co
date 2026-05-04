@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { EstadoBadge } from "@/components/EstadoBadge";
 import { iconoTipo, labelTipo, estadoGarantia, ESTADOS_EQUIPO, TIPOS_EQUIPO, type EstadoEquipo, type TipoEquipo } from "@/lib/inventario";
-import { Plus, Search, Eye, Pencil, X } from "lucide-react";
+import { Plus, Search, Eye, Pencil, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 type Equipo = {
@@ -21,44 +21,68 @@ type Equipo = {
 export default function Equipos() {
   const [loading, setLoading] = useState(true);
   const [equipos, setEquipos] = useState<Equipo[]>([]);
+  const [total, setTotal] = useState(0);
   const [filiales, setFiliales] = useState<{ id: string; nombre: string }[]>([]);
   const [sectores, setSectores] = useState<{ id: string; nombre: string; filial_id: string }[]>([]);
 
   const [busqueda, setBusqueda] = useState("");
+  const [busquedaDeb, setBusquedaDeb] = useState("");
   const [fFilial, setFFilial] = useState("todas");
   const [fSector, setFSector] = useState("todos");
   const [fTipo, setFTipo] = useState("todos");
   const [fEstado, setFEstado] = useState("todos");
+  const [pagina, setPagina] = useState(0);
+  const PAGE = 20;
+
+  // Debounce de búsqueda
+  useEffect(() => {
+    const t = setTimeout(() => { setBusquedaDeb(busqueda); setPagina(0); }, 300);
+    return () => clearTimeout(t);
+  }, [busqueda]);
 
   useEffect(() => {
     (async () => {
-      const [eq, fi, se] = await Promise.all([
-        supabase.from("equipos").select("id,codigo_inventario,tipo_equipo,marca,modelo,numero_serie,estado,usuario_asignado,garantia_hasta,filial_id,sector_id").order("codigo_inventario"),
+      const [fi, se] = await Promise.all([
         supabase.from("filiales").select("id,nombre").order("nombre"),
         supabase.from("sectores").select("id,nombre,filial_id").order("nombre"),
       ]);
-      setEquipos((eq.data as any) ?? []);
       setFiliales((fi.data as any) ?? []);
       setSectores((se.data as any) ?? []);
-      setLoading(false);
     })();
   }, []);
 
+  // Búsqueda y filtros en servidor + paginación
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+      let query = supabase
+        .from("equipos")
+        .select("id,codigo_inventario,tipo_equipo,marca,modelo,numero_serie,estado,usuario_asignado,garantia_hasta,filial_id,sector_id", { count: "exact" })
+        .order("codigo_inventario");
+      const q = busquedaDeb.trim();
+      if (q) {
+        const safe = q.replace(/[%,]/g, " ");
+        query = query.or(
+          `codigo_inventario.ilike.%${safe}%,marca.ilike.%${safe}%,modelo.ilike.%${safe}%,numero_serie.ilike.%${safe}%,usuario_asignado.ilike.%${safe}%`
+        );
+      }
+      if (fFilial !== "todas") query = query.eq("filial_id", fFilial);
+      if (fSector !== "todos") query = query.eq("sector_id", fSector);
+      if (fTipo !== "todos") query = query.eq("tipo_equipo", fTipo as any);
+      if (fEstado !== "todos") query = query.eq("estado", fEstado as any);
+      query = query.range(pagina * PAGE, pagina * PAGE + PAGE - 1);
+      const { data, count } = await query;
+      setEquipos((data as any) ?? []);
+      setTotal(count ?? 0);
+      setLoading(false);
+    })();
+  }, [busquedaDeb, fFilial, fSector, fTipo, fEstado, pagina]);
+
   const sectoresFiltrados = fFilial === "todas" ? sectores : sectores.filter(s => s.filial_id === fFilial);
+  const filtrados = equipos;
+  const totalPaginas = Math.max(1, Math.ceil(total / PAGE));
 
-  const filtrados = useMemo(() => {
-    const q = busqueda.toLowerCase().trim();
-    return equipos.filter(e => {
-      if (fFilial !== "todas" && e.filial_id !== fFilial) return false;
-      if (fSector !== "todos" && e.sector_id !== fSector) return false;
-      if (fTipo !== "todos" && e.tipo_equipo !== fTipo) return false;
-      if (fEstado !== "todos" && e.estado !== fEstado) return false;
-      if (q && ![e.codigo_inventario, e.marca, e.modelo, e.numero_serie, e.usuario_asignado].some(v => v?.toLowerCase().includes(q))) return false;
-      return true;
-    });
-  }, [equipos, busqueda, fFilial, fSector, fTipo, fEstado]);
-
-  const limpiar = () => { setBusqueda(""); setFFilial("todas"); setFSector("todos"); setFTipo("todos"); setFEstado("todos"); };
+  const limpiar = () => { setBusqueda(""); setFFilial("todas"); setFSector("todos"); setFTipo("todos"); setFEstado("todos"); setPagina(0); };
   const filiNombre = (id: string | null) => filiales.find(f => f.id === id)?.nombre ?? "—";
   const sectNombre = (id: string | null) => sectores.find(s => s.id === id)?.nombre ?? "—";
 
@@ -67,7 +91,7 @@ export default function Equipos() {
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Equipos</h1>
-          <p className="text-sm text-muted-foreground mt-1">{filtrados.length} de {equipos.length} equipos</p>
+          <p className="text-sm text-muted-foreground mt-1">{total} equipo(s) encontrados</p>
         </div>
         <Button asChild><Link to="/equipos/nuevo"><Plus className="h-4 w-4 mr-1.5" />Agregar equipo</Link></Button>
       </div>
@@ -157,6 +181,15 @@ export default function Equipos() {
             </TableBody>
           </Table>
         </div>
+        {total > PAGE && (
+          <div className="flex items-center justify-between p-3 border-t bg-muted/20 text-sm">
+            <span className="text-muted-foreground">Página {pagina + 1} de {totalPaginas} · {total} equipos</span>
+            <div className="flex gap-2">
+              <Button size="sm" variant="outline" disabled={pagina === 0} onClick={() => setPagina(p => p - 1)}><ChevronLeft className="h-4 w-4" /></Button>
+              <Button size="sm" variant="outline" disabled={pagina + 1 >= totalPaginas} onClick={() => setPagina(p => p + 1)}><ChevronRight className="h-4 w-4" /></Button>
+            </div>
+          </div>
+        )}
       </Card>
     </div>
   );
