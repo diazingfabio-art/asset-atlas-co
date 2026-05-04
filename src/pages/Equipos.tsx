@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Card } from "@/components/ui/card";
@@ -8,7 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { EstadoBadge } from "@/components/EstadoBadge";
 import { iconoTipo, labelTipo, estadoGarantia, ESTADOS_EQUIPO, TIPOS_EQUIPO, type EstadoEquipo, type TipoEquipo } from "@/lib/inventario";
-import { Plus, Search, Eye, Pencil, X } from "lucide-react";
+import { Plus, Search, Eye, Pencil, X, ChevronLeft, ChevronRight } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 
 type Equipo = {
