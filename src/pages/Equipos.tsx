@@ -181,6 +181,15 @@ export default function Equipos() {
             </TableBody>
           </Table>
         </div>
+        {total > PAGE && (
+          <div className="flex items-center justify-between p-3 border-t bg-muted/20 text-sm">
+            <span className="text-muted-foreground">Página {pagina + 1} de {totalPaginas} · {total} equipos</span>
+            <div className="flex gap-2">
+              <Button size="sm" variant="outline" disabled={pagina === 0} onClick={() => setPagina(p => p - 1)}><ChevronLeft className="h-4 w-4" /></Button>
+              <Button size="sm" variant="outline" disabled={pagina + 1 >= totalPaginas} onClick={() => setPagina(p => p + 1)}><ChevronRight className="h-4 w-4" /></Button>
+            </div>
+          </div>
+        )}
       </Card>
     </div>
   );
