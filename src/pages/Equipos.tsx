@@ -21,44 +21,68 @@ type Equipo = {
 export default function Equipos() {
   const [loading, setLoading] = useState(true);
   const [equipos, setEquipos] = useState<Equipo[]>([]);
+  const [total, setTotal] = useState(0);
   const [filiales, setFiliales] = useState<{ id: string; nombre: string }[]>([]);
   const [sectores, setSectores] = useState<{ id: string; nombre: string; filial_id: string }[]>([]);
 
   const [busqueda, setBusqueda] = useState("");
+  const [busquedaDeb, setBusquedaDeb] = useState("");
   const [fFilial, setFFilial] = useState("todas");
   const [fSector, setFSector] = useState("todos");
   const [fTipo, setFTipo] = useState("todos");
   const [fEstado, setFEstado] = useState("todos");
+  const [pagina, setPagina] = useState(0);
+  const PAGE = 20;
+
+  // Debounce de búsqueda
+  useEffect(() => {
+    const t = setTimeout(() => { setBusquedaDeb(busqueda); setPagina(0); }, 300);
+    return () => clearTimeout(t);
+  }, [busqueda]);
 
   useEffect(() => {
     (async () => {
-      const [eq, fi, se] = await Promise.all([
-        supabase.from("equipos").select("id,codigo_inventario,tipo_equipo,marca,modelo,numero_serie,estado,usuario_asignado,garantia_hasta,filial_id,sector_id").order("codigo_inventario"),
+      const [fi, se] = await Promise.all([
         supabase.from("filiales").select("id,nombre").order("nombre"),
         supabase.from("sectores").select("id,nombre,filial_id").order("nombre"),
       ]);
-      setEquipos((eq.data as any) ?? []);
       setFiliales((fi.data as any) ?? []);
       setSectores((se.data as any) ?? []);
-      setLoading(false);
     })();
   }, []);
 
+  // Búsqueda y filtros en servidor + paginación
+  useEffect(() => {
+    (async () => {
+      setLoading(true);
+      let query = supabase
+        .from("equipos")
+        .select("id,codigo_inventario,tipo_equipo,marca,modelo,numero_serie,estado,usuario_asignado,garantia_hasta,filial_id,sector_id", { count: "exact" })
+        .order("codigo_inventario");
+      const q = busquedaDeb.trim();
+      if (q) {
+        const safe = q.replace(/[%,]/g, " ");
+        query = query.or(
+          `codigo_inventario.ilike.%${safe}%,marca.ilike.%${safe}%,modelo.ilike.%${safe}%,numero_serie.ilike.%${safe}%,usuario_asignado.ilike.%${safe}%`
+        );
+      }
+      if (fFilial !== "todas") query = query.eq("filial_id", fFilial);
+      if (fSector !== "todos") query = query.eq("sector_id", fSector);
+      if (fTipo !== "todos") query = query.eq("tipo_equipo", fTipo as any);
+      if (fEstado !== "todos") query = query.eq("estado", fEstado as any);
+      query = query.range(pagina * PAGE, pagina * PAGE + PAGE - 1);
+      const { data, count } = await query;
+      setEquipos((data as any) ?? []);
+      setTotal(count ?? 0);
+      setLoading(false);
+    })();
+  }, [busquedaDeb, fFilial, fSector, fTipo, fEstado, pagina]);
+
   const sectoresFiltrados = fFilial === "todas" ? sectores : sectores.filter(s => s.filial_id === fFilial);
+  const filtrados = equipos;
+  const totalPaginas = Math.max(1, Math.ceil(total / PAGE));
 
-  const filtrados = useMemo(() => {
-    const q = busqueda.toLowerCase().trim();
-    return equipos.filter(e => {
-      if (fFilial !== "todas" && e.filial_id !== fFilial) return false;
-      if (fSector !== "todos" && e.sector_id !== fSector) return false;
-      if (fTipo !== "todos" && e.tipo_equipo !== fTipo) return false;
-      if (fEstado !== "todos" && e.estado !== fEstado) return false;
-      if (q && ![e.codigo_inventario, e.marca, e.modelo, e.numero_serie, e.usuario_asignado].some(v => v?.toLowerCase().includes(q))) return false;
-      return true;
-    });
-  }, [equipos, busqueda, fFilial, fSector, fTipo, fEstado]);
-
-  const limpiar = () => { setBusqueda(""); setFFilial("todas"); setFSector("todos"); setFTipo("todos"); setFEstado("todos"); };
+  const limpiar = () => { setBusqueda(""); setFFilial("todas"); setFSector("todos"); setFTipo("todos"); setFEstado("todos"); setPagina(0); };
   const filiNombre = (id: string | null) => filiales.find(f => f.id === id)?.nombre ?? "—";
   const sectNombre = (id: string | null) => sectores.find(s => s.id === id)?.nombre ?? "—";
 
