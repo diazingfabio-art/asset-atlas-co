@@ -91,7 +91,7 @@ export default function Equipos() {
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">Equipos</h1>
-          <p className="text-sm text-muted-foreground mt-1">{filtrados.length} de {equipos.length} equipos</p>
+          <p className="text-sm text-muted-foreground mt-1">{total} equipo(s) encontrados</p>
         </div>
         <Button asChild><Link to="/equipos/nuevo"><Plus className="h-4 w-4 mr-1.5" />Agregar equipo</Link></Button>
       </div>
