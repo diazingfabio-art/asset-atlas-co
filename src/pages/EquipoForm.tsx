@@ -223,12 +223,28 @@ export default function EquipoForm() {
           <Card>
             <CardHeader><CardTitle className="text-base">Especificaciones técnicas</CardTitle></CardHeader>
             <CardContent className="grid sm:grid-cols-2 gap-4">
+              <div><Label>Hostname</Label><Input value={form.hostname} onChange={e => upd("hostname", e.target.value)} className="font-mono" /></div>
               <div><Label>Sistema operativo</Label><Input value={form.sistema_operativo} onChange={e => upd("sistema_operativo", e.target.value)} /></div>
               <div><Label>Procesador</Label><Input value={form.procesador} onChange={e => upd("procesador", e.target.value)} /></div>
               <div><Label>RAM (GB)</Label><Input type="number" value={form.ram_gb} onChange={e => upd("ram_gb", e.target.value)} /></div>
               <div><Label>Almacenamiento (GB)</Label><Input type="number" value={form.almacenamiento_gb} onChange={e => upd("almacenamiento_gb", e.target.value)} /></div>
               <div><Label>IP asignada</Label><Input value={form.ip_asignada} onChange={e => upd("ip_asignada", e.target.value)} /></div>
               <div><Label>MAC address</Label><Input value={form.mac_address} onChange={e => upd("mac_address", e.target.value)} className="font-mono" /></div>
+              <div><Label>Teclado</Label><Input value={form.teclado} onChange={e => upd("teclado", e.target.value)} /></div>
+              <div><Label>Mouse</Label><Input value={form.mouse} onChange={e => upd("mouse", e.target.value)} /></div>
+              <div><Label>Monitor 1</Label><Input value={form.monitor_1} onChange={e => upd("monitor_1", e.target.value)} /></div>
+              <div><Label>Monitor 2</Label><Input value={form.monitor_2} onChange={e => upd("monitor_2", e.target.value)} /></div>
+            </CardContent>
+          </Card>
+        )}
+
+        {showImei && (
+          <Card>
+            <CardHeader><CardTitle className="text-base">Datos del celular</CardTitle></CardHeader>
+            <CardContent className="grid sm:grid-cols-2 gap-4">
+              <div><Label>Número de línea</Label><Input value={form.numero_linea} onChange={e => upd("numero_linea", e.target.value)} /></div>
+              <div><Label>Operadora</Label><Input value={form.operadora} onChange={e => upd("operadora", e.target.value)} /></div>
+              <div className="sm:col-span-2"><Label>Cuenta Gmail</Label><Input type="email" value={form.cuenta_gmail} onChange={e => upd("cuenta_gmail", e.target.value)} /></div>
             </CardContent>
           </Card>
         )}
