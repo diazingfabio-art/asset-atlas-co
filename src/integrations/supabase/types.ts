@@ -106,25 +106,33 @@ export type Database = {
           almacenamiento_gb: number | null
           codigo_inventario: string
           creado_en: string
+          cuenta_gmail: string | null
           estado: Database["public"]["Enums"]["estado_equipo"]
           fecha_adquisicion: string | null
           filial_id: string | null
           foto_url: string | null
           garantia_hasta: string | null
+          hostname: string | null
           id: string
           ip_asignada: string | null
           mac_address: string | null
           marca: string | null
           modelo: string | null
+          monitor_1: string | null
+          monitor_2: string | null
+          mouse: string | null
           numero_factura: string | null
           numero_imei: string | null
+          numero_linea: string | null
           numero_serie: string | null
           observaciones: string | null
+          operadora: string | null
           procesador: string | null
           proveedor: string | null
           ram_gb: number | null
           sector_id: string | null
           sistema_operativo: string | null
+          teclado: string | null
           tipo_equipo: Database["public"]["Enums"]["tipo_equipo"]
           usuario_asignado: string | null
           valor_compra: number | null
@@ -134,25 +142,33 @@ export type Database = {
           almacenamiento_gb?: number | null
           codigo_inventario: string
           creado_en?: string
+          cuenta_gmail?: string | null
           estado?: Database["public"]["Enums"]["estado_equipo"]
           fecha_adquisicion?: string | null
           filial_id?: string | null
           foto_url?: string | null
           garantia_hasta?: string | null
+          hostname?: string | null
           id?: string
           ip_asignada?: string | null
           mac_address?: string | null
           marca?: string | null
           modelo?: string | null
+          monitor_1?: string | null
+          monitor_2?: string | null
+          mouse?: string | null
           numero_factura?: string | null
           numero_imei?: string | null
+          numero_linea?: string | null
           numero_serie?: string | null
           observaciones?: string | null
+          operadora?: string | null
           procesador?: string | null
           proveedor?: string | null
           ram_gb?: number | null
           sector_id?: string | null
           sistema_operativo?: string | null
+          teclado?: string | null
           tipo_equipo: Database["public"]["Enums"]["tipo_equipo"]
           usuario_asignado?: string | null
           valor_compra?: number | null
@@ -162,25 +178,33 @@ export type Database = {
           almacenamiento_gb?: number | null
           codigo_inventario?: string
           creado_en?: string
+          cuenta_gmail?: string | null
           estado?: Database["public"]["Enums"]["estado_equipo"]
           fecha_adquisicion?: string | null
           filial_id?: string | null
           foto_url?: string | null
           garantia_hasta?: string | null
+          hostname?: string | null
           id?: string
           ip_asignada?: string | null
           mac_address?: string | null
           marca?: string | null
           modelo?: string | null
+          monitor_1?: string | null
+          monitor_2?: string | null
+          mouse?: string | null
           numero_factura?: string | null
           numero_imei?: string | null
+          numero_linea?: string | null
           numero_serie?: string | null
           observaciones?: string | null
+          operadora?: string | null
           procesador?: string | null
           proveedor?: string | null
           ram_gb?: number | null
           sector_id?: string | null
           sistema_operativo?: string | null
+          teclado?: string | null
           tipo_equipo?: Database["public"]["Enums"]["tipo_equipo"]
           usuario_asignado?: string | null
           valor_compra?: number | null
