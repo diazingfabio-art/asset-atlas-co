@@ -18,6 +18,8 @@ import Auditorias from "./pages/Auditorias";
 import AuditoriaDetalle from "./pages/AuditoriaDetalle";
 import Alertas from "./pages/Alertas";
 import Configuracion from "./pages/Configuracion";
+import ImportarExcel from "./pages/ImportarExcel";
+import ModoAuditoria from "./pages/ModoAuditoria";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
