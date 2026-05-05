@@ -45,6 +45,8 @@ const App = () => (
               <Route path="/auditorias" element={<ProtectedRoute requireModulo="auditorias"><Auditorias /></ProtectedRoute>} />
               <Route path="/auditorias/:id" element={<ProtectedRoute requireModulo="auditorias"><AuditoriaDetalle /></ProtectedRoute>} />
               <Route path="/alertas" element={<ProtectedRoute requireModulo="alertas"><Alertas /></ProtectedRoute>} />
+              <Route path="/importar" element={<ProtectedRoute requireModulo="equipos"><ImportarExcel /></ProtectedRoute>} />
+              <Route path="/modo-auditoria" element={<ProtectedRoute requireModulo="auditorias"><ModoAuditoria /></ProtectedRoute>} />
               <Route path="/configuracion" element={<ProtectedRoute requireAdmin><Configuracion /></ProtectedRoute>} />
             </Route>
             <Route path="*" element={<NotFound />} />
