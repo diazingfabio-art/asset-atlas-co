@@ -1,5 +1,5 @@
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { LayoutDashboard, HardDrive, Building2, History, FileBarChart, ClipboardCheck, Wrench, AlertTriangle, Settings, LogOut, ShieldCheck, User } from "lucide-react";
+import { LayoutDashboard, HardDrive, Building2, History, FileBarChart, ClipboardCheck, Wrench, AlertTriangle, Settings, LogOut, ShieldCheck, User, Upload, Eye } from "lucide-react";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel,
   SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarHeader, SidebarFooter, useSidebar,
@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 const navPrincipal: { title: string; url: string; icon: any; modulo?: AppModule }[] = [
   { title: "Panel principal", url: "/", icon: LayoutDashboard },
   { title: "Equipos", url: "/equipos", icon: HardDrive, modulo: "equipos" },
+  { title: "Importar Excel", url: "/importar", icon: Upload, modulo: "equipos" },
   { title: "Filiales y sectores", url: "/filiales", icon: Building2, modulo: "filiales" },
 ];
 
@@ -20,7 +21,8 @@ const navOperaciones: { title: string; url: string; icon: any; modulo?: AppModul
 
 const navReportes: { title: string; url: string; icon: any; modulo?: AppModule }[] = [
   { title: "Reportes", url: "/reportes", icon: FileBarChart, modulo: "reportes" },
-  { title: "Modo auditoría", url: "/auditorias", icon: ClipboardCheck, modulo: "auditorias" },
+  { title: "Modo auditoría", url: "/modo-auditoria", icon: Eye, modulo: "auditorias" },
+  { title: "Auditorías checklist", url: "/auditorias", icon: ClipboardCheck, modulo: "auditorias" },
   { title: "Alertas", url: "/alertas", icon: AlertTriangle, modulo: "alertas" },
 ];
 

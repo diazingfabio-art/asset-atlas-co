@@ -29,6 +29,8 @@ export default function EquipoForm() {
     proveedor: "", numero_factura: "", garantia_hasta: "",
     sistema_operativo: "", procesador: "", ram_gb: "", almacenamiento_gb: "",
     ip_asignada: "", mac_address: "", observaciones: "",
+    hostname: "", numero_linea: "", operadora: "", cuenta_gmail: "",
+    teclado: "", mouse: "", monitor_1: "", monitor_2: "",
   });
 
   useEffect(() => {
@@ -56,6 +58,10 @@ export default function EquipoForm() {
             ram_gb: data.ram_gb?.toString() ?? "", almacenamiento_gb: data.almacenamiento_gb?.toString() ?? "",
             ip_asignada: data.ip_asignada ?? "", mac_address: data.mac_address ?? "",
             observaciones: data.observaciones ?? "",
+            hostname: data.hostname ?? "", numero_linea: data.numero_linea ?? "",
+            operadora: data.operadora ?? "", cuenta_gmail: data.cuenta_gmail ?? "",
+            teclado: data.teclado ?? "", mouse: data.mouse ?? "",
+            monitor_1: data.monitor_1 ?? "", monitor_2: data.monitor_2 ?? "",
           });
         }
       }
@@ -121,6 +127,12 @@ export default function EquipoForm() {
       almacenamiento_gb: form.almacenamiento_gb ? parseInt(form.almacenamiento_gb) : null,
       ip_asignada: form.ip_asignada || null, mac_address: form.mac_address || null,
       observaciones: form.observaciones || null,
+      hostname: requiereSpecsPc(form.tipo_equipo) ? (form.hostname || null) : null,
+      numero_linea: requiereImei(form.tipo_equipo) ? (form.numero_linea || null) : null,
+      operadora: requiereImei(form.tipo_equipo) ? (form.operadora || null) : null,
+      cuenta_gmail: requiereImei(form.tipo_equipo) ? (form.cuenta_gmail || null) : null,
+      teclado: form.teclado || null, mouse: form.mouse || null,
+      monitor_1: form.monitor_1 || null, monitor_2: form.monitor_2 || null,
     };
     const res = editing
       ? await supabase.from("equipos").update(payload).eq("id", id!)
@@ -211,12 +223,28 @@ export default function EquipoForm() {
           <Card>
             <CardHeader><CardTitle className="text-base">Especificaciones técnicas</CardTitle></CardHeader>
             <CardContent className="grid sm:grid-cols-2 gap-4">
+              <div><Label>Hostname</Label><Input value={form.hostname} onChange={e => upd("hostname", e.target.value)} className="font-mono" /></div>
               <div><Label>Sistema operativo</Label><Input value={form.sistema_operativo} onChange={e => upd("sistema_operativo", e.target.value)} /></div>
               <div><Label>Procesador</Label><Input value={form.procesador} onChange={e => upd("procesador", e.target.value)} /></div>
               <div><Label>RAM (GB)</Label><Input type="number" value={form.ram_gb} onChange={e => upd("ram_gb", e.target.value)} /></div>
               <div><Label>Almacenamiento (GB)</Label><Input type="number" value={form.almacenamiento_gb} onChange={e => upd("almacenamiento_gb", e.target.value)} /></div>
               <div><Label>IP asignada</Label><Input value={form.ip_asignada} onChange={e => upd("ip_asignada", e.target.value)} /></div>
               <div><Label>MAC address</Label><Input value={form.mac_address} onChange={e => upd("mac_address", e.target.value)} className="font-mono" /></div>
+              <div><Label>Teclado</Label><Input value={form.teclado} onChange={e => upd("teclado", e.target.value)} /></div>
+              <div><Label>Mouse</Label><Input value={form.mouse} onChange={e => upd("mouse", e.target.value)} /></div>
+              <div><Label>Monitor 1</Label><Input value={form.monitor_1} onChange={e => upd("monitor_1", e.target.value)} /></div>
+              <div><Label>Monitor 2</Label><Input value={form.monitor_2} onChange={e => upd("monitor_2", e.target.value)} /></div>
+            </CardContent>
+          </Card>
+        )}
+
+        {showImei && (
+          <Card>
+            <CardHeader><CardTitle className="text-base">Datos del celular</CardTitle></CardHeader>
+            <CardContent className="grid sm:grid-cols-2 gap-4">
+              <div><Label>Número de línea</Label><Input value={form.numero_linea} onChange={e => upd("numero_linea", e.target.value)} /></div>
+              <div><Label>Operadora</Label><Input value={form.operadora} onChange={e => upd("operadora", e.target.value)} /></div>
+              <div className="sm:col-span-2"><Label>Cuenta Gmail</Label><Input type="email" value={form.cuenta_gmail} onChange={e => upd("cuenta_gmail", e.target.value)} /></div>
             </CardContent>
           </Card>
         )}
