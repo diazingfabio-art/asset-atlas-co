@@ -29,6 +29,8 @@ export default function EquipoForm() {
     proveedor: "", numero_factura: "", garantia_hasta: "",
     sistema_operativo: "", procesador: "", ram_gb: "", almacenamiento_gb: "",
     ip_asignada: "", mac_address: "", observaciones: "",
+    hostname: "", numero_linea: "", operadora: "", cuenta_gmail: "",
+    teclado: "", mouse: "", monitor_1: "", monitor_2: "",
   });
 
   useEffect(() => {
