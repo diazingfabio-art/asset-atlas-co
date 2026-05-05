@@ -58,6 +58,10 @@ export default function EquipoForm() {
             ram_gb: data.ram_gb?.toString() ?? "", almacenamiento_gb: data.almacenamiento_gb?.toString() ?? "",
             ip_asignada: data.ip_asignada ?? "", mac_address: data.mac_address ?? "",
             observaciones: data.observaciones ?? "",
+            hostname: data.hostname ?? "", numero_linea: data.numero_linea ?? "",
+            operadora: data.operadora ?? "", cuenta_gmail: data.cuenta_gmail ?? "",
+            teclado: data.teclado ?? "", mouse: data.mouse ?? "",
+            monitor_1: data.monitor_1 ?? "", monitor_2: data.monitor_2 ?? "",
           });
         }
       }
