@@ -1,5 +1,5 @@
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { LayoutDashboard, HardDrive, Building2, History, FileBarChart, ClipboardCheck, Wrench, AlertTriangle, Settings, LogOut, ShieldCheck, User } from "lucide-react";
+import { LayoutDashboard, HardDrive, Building2, History, FileBarChart, ClipboardCheck, Wrench, AlertTriangle, Settings, LogOut, ShieldCheck, User, Upload, Eye } from "lucide-react";
 import {
   Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel,
   SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarHeader, SidebarFooter, useSidebar,
