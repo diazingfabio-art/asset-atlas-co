@@ -127,6 +127,12 @@ export default function EquipoForm() {
       almacenamiento_gb: form.almacenamiento_gb ? parseInt(form.almacenamiento_gb) : null,
       ip_asignada: form.ip_asignada || null, mac_address: form.mac_address || null,
       observaciones: form.observaciones || null,
+      hostname: requiereSpecsPc(form.tipo_equipo) ? (form.hostname || null) : null,
+      numero_linea: requiereImei(form.tipo_equipo) ? (form.numero_linea || null) : null,
+      operadora: requiereImei(form.tipo_equipo) ? (form.operadora || null) : null,
+      cuenta_gmail: requiereImei(form.tipo_equipo) ? (form.cuenta_gmail || null) : null,
+      teclado: form.teclado || null, mouse: form.mouse || null,
+      monitor_1: form.monitor_1 || null, monitor_2: form.monitor_2 || null,
     };
     const res = editing
       ? await supabase.from("equipos").update(payload).eq("id", id!)
